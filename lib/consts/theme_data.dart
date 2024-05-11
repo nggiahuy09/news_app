@@ -23,6 +23,7 @@ class Styles {
       colorScheme: ThemeData().colorScheme.copyWith(
             secondary: isDarkTheme ? darkIconsColor : lightIconsColor,
             brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+            inversePrimary: isDarkTheme ? lightCardColor : darkCardColor,
           ),
     );
   }
