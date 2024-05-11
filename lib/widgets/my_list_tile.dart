@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MyListTile extends StatelessWidget {
-  const MyListTile({
+class MyListTileWidget extends StatelessWidget {
+  const MyListTileWidget({
     super.key,
     required this.title,
     required this.icon,
