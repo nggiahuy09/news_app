@@ -4,14 +4,14 @@ import 'package:news_app/providers/theme_provider.dart';
 import 'package:news_app/widgets/my_list_tile.dart';
 import 'package:provider/provider.dart';
 
-class MyDrawer extends StatefulWidget {
-  const MyDrawer({super.key});
+class MyDrawerWidget extends StatefulWidget {
+  const MyDrawerWidget({super.key});
 
   @override
-  State<MyDrawer> createState() => _MyDrawerState();
+  State<MyDrawerWidget> createState() => _MyDrawerWidgetState();
 }
 
-class _MyDrawerState extends State<MyDrawer> {
+class _MyDrawerWidgetState extends State<MyDrawerWidget> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
@@ -45,12 +45,12 @@ class _MyDrawerState extends State<MyDrawer> {
                   children: [
                     Column(
                       children: [
-                        MyListTile(
+                        MyListTileWidget(
                           title: 'Home',
                           icon: IconlyBold.home,
                           onTap: () {},
                         ),
-                        MyListTile(
+                        MyListTileWidget(
                           title: 'Bookmarks',
                           icon: IconlyBold.bookmark,
                           onTap: () {},

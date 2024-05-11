@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:news_app/consts/vars.dart';
 import 'package:news_app/widgets/my_drawer.dart';
-import 'package:provider/provider.dart';
-import '../providers/theme_provider.dart';
+import 'package:news_app/widgets/my_tabs.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,33 +13,63 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var newsType = NewsType.allNews;
+
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      drawer: const MyDrawer(),
-      body: Center(
-        child: SwitchListTile(
-          title: Text(
-            themeProvider.getDarkTheme ? 'Dark' : 'Light',
-            style: TextStyle(
-              color: Theme.of(context).textSelectionTheme.cursorColor,
+        centerTitle: true,
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.search,
             ),
           ),
-          secondary: Icon(
-            themeProvider.getDarkTheme ? Icons.dark_mode : Icons.light_mode,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          value: themeProvider.getDarkTheme,
-          onChanged: (bool value) {
-            setState(() {
-              themeProvider.setDarkTheme = value;
-            });
-          },
+        ],
+        title: const Text('News App'),
+      ),
+      drawer: const MyDrawerWidget(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                MyTabWidget(
+                  text: 'All News',
+                  onTap: () {
+                    if (newsType == NewsType.allNews) {
+                      return;
+                    } else {
+                      setState(() {
+                        newsType = NewsType.allNews;
+                      });
+                    }
+                  },
+                  isSelected: newsType == NewsType.allNews,
+                ),
+                const SizedBox(width: 8),
+                MyTabWidget(
+                  text: 'Top Trending',
+                  onTap: () {
+                    if (newsType == NewsType.topTrending) {
+                      return;
+                    } else {
+                      setState(() {
+                        newsType = NewsType.topTrending;
+                      });
+                    }
+                  },
+                  isSelected: newsType == NewsType.topTrending,
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
