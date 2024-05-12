@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:news_app/consts/global_colors.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/services/utils.dart';
 import 'package:news_app/widgets/my_drawer.dart';
+import 'package:news_app/widgets/my_pagination_button.dart';
 import 'package:news_app/widgets/my_tabs.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var newsType = NewsType.allNews;
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-        title: const Text('News App'),
+        title: const Text(
+          'News App',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
       drawer: const MyDrawerWidget(),
       body: Padding(
@@ -68,7 +76,86 @@ class _HomeScreenState extends State<HomeScreen> {
                   isSelected: newsType == NewsType.topTrending,
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 8),
+            newsType == NewsType.allNews
+                ? SizedBox(
+                    height: kBottomNavigationBarHeight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        MyPaginationButtonWidget(
+                          text: 'Prev',
+                          onPressed: () {
+                            if (currentPageIndex == 0) return;
+                            setState(() {
+                              currentPageIndex--;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: 12,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Material(
+                                  color: currentPageIndex == index
+                                      ? Utils(context).getDarkTheme
+                                          ? darkButtonColor
+                                          : lightButtonColor
+                                      : Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        currentPageIndex = index;
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                      child: Center(
+                                        child: Text(
+                                          (index + 1).toString(),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: currentPageIndex == index
+                                                ? (Utils(context).getDarkTheme
+                                                    ? Theme.of(context)
+                                                        .scaffoldBackgroundColor
+                                                    : Colors.white)
+                                                : Utils(context).getColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        MyPaginationButtonWidget(
+                          text: 'Next',
+                          onPressed: () {
+                            setState(() {
+                              currentPageIndex++;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(
+                    color: Colors.deepPurple,
+                  ),
           ],
         ),
       ),

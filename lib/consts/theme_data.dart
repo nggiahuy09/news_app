@@ -18,6 +18,13 @@ class Styles {
             bodyColor: isDarkTheme ? Colors.white : Colors.black,
             displayColor: isDarkTheme ? Colors.white : Colors.black,
           ),
+      buttonTheme: ButtonThemeData(
+        colorScheme: ThemeData().colorScheme.copyWith(
+            secondary: isDarkTheme ? darkIconsColor : lightIconsColor,
+            brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+            inversePrimary: isDarkTheme ? lightCardColor : darkCardColor,
+          ),
+      ),
       cardColor: isDarkTheme ? darkCardColor : lightCardColor,
       brightness: isDarkTheme ? Brightness.dark : Brightness.light,
       colorScheme: ThemeData().colorScheme.copyWith(

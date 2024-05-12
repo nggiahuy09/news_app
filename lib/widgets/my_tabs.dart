@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/consts/vars.dart';
 
 class MyTabWidget extends StatelessWidget {
   const MyTabWidget({
@@ -19,7 +20,7 @@ class MyTabWidget extends StatelessWidget {
         onTap();
       },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        padding: defaultButtonPadding,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           color: isSelected ? Theme.of(context).cardColor : Colors.transparent,
@@ -27,7 +28,7 @@ class MyTabWidget extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: isSelected ? 18 : 16,
+            fontSize: isSelected ? 20 : 18,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),

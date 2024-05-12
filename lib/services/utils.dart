@@ -6,6 +6,6 @@ class Utils {
   BuildContext context;
   Utils(this.context);
 
-  bool get getTheme => Provider.of<ThemeProvider>(context).getDarkTheme;
-  Color get getColor => getTheme ? Colors.white : Colors.black;
+  bool get getDarkTheme => Provider.of<ThemeProvider>(context).getDarkTheme;
+  Color get getColor => getDarkTheme ? Colors.white : Colors.black;
 }
