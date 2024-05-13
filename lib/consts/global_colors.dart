@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // Light theme
 Color lightScaffoldColor = const Color(0xFFF5F5F5);
-Color lightCardColor = const Color(0xFFFfFFFf); //F0FFFF
+Color lightCardColor = const Color(0xFFD0E8F2); //F0FFFF
 Color lightBackgroundColor = const Color(0xFFD0E8F2);
 Color lightIconsColor = const Color(0xFF79A3B1);
 Color lightTextColor = Colors.black;

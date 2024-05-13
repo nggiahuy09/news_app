@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   var newsType = NewsType.allNews;
   int currentPageIndex = 0;
+  String currentSortBy = SortByEnum.relevancy.name;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
+            // tabs bar
             Row(
               children: [
                 MyTabWidget(
@@ -78,6 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             const SizedBox(height: 8),
+
+            // pagination bar
             newsType == NewsType.allNews
                 ? SizedBox(
                     height: kBottomNavigationBarHeight,
@@ -156,6 +160,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Container(
                     color: Colors.deepPurple,
                   ),
+            const SizedBox(height: 8),
+
+            // dropdown selection
+            newsType == NewsType.allNews
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: Material(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      color: Theme.of(context).cardColor,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: DropdownButton(
+                          borderRadius: BorderRadius.circular(12),
+                          dropdownColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          value: currentSortBy,
+                          items: Utils(context).getDropDownItems,
+                          onChanged: (String? selectedItem) {
+                            currentSortBy = selectedItem!;
+                          },
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
