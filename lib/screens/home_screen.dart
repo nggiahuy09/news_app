@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:news_app/consts/global_colors.dart';
 import 'package:news_app/consts/vars.dart';
 import 'package:news_app/services/utils.dart';
+import 'package:news_app/widgets/my_articles_widget.dart';
 import 'package:news_app/widgets/my_drawer.dart';
+import 'package:news_app/widgets/my_loading_widget.dart';
 import 'package:news_app/widgets/my_pagination_button.dart';
 import 'package:news_app/widgets/my_tabs.dart';
 
@@ -110,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   vertical: 8.0,
                                 ),
                                 child: Material(
+                                  borderRadius: BorderRadius.circular(12),
                                   color: currentPageIndex == index
                                       ? Utils(context).getDarkTheme
                                           ? darkButtonColor
@@ -123,7 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 16),
+                                        horizontal: 16,
+                                      ),
                                       child: Center(
                                         child: Text(
                                           (index + 1).toString(),
@@ -179,11 +184,26 @@ class _HomeScreenState extends State<HomeScreen> {
                               Theme.of(context).scaffoldBackgroundColor,
                           value: currentSortBy,
                           items: Utils(context).getDropDownItems,
-                          onChanged: (String? selectedItem) {
-                            currentSortBy = selectedItem!;
+                          onChanged: (selectedItem) {
+                            setState(() {
+                              currentSortBy = selectedItem!;
+                            });
                           },
                         ),
                       ),
+                    ),
+                  )
+                : Container(),
+            const SizedBox(height: 8),
+
+            // list articles
+            newsType == NewsType.allNews
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: 20,
+                      itemBuilder: (context, index) {
+                        return const MyArticlesWidget();
+                      },
                     ),
                   )
                 : Container(),

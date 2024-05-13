@@ -20,17 +20,22 @@ class Utils {
       ),
       DropdownMenuItem<String>(
         value: SortByEnum.popularity.name,
-        child: const Text(
-          'Popularity'
-        ),
+        child: const Text('Popularity'),
       ),
       DropdownMenuItem<String>(
         value: SortByEnum.publishedAt.name,
-        child: const Text(
-          'Published At'
-        ),
+        child: const Text('Published At'),
       ),
     ];
     return menuItems;
   }
+
+  Size get getScreenSize => MediaQuery.of(context).size;
+
+  Color get getBaseShimmerColor =>
+      getDarkTheme ? Colors.grey.shade500 : Colors.grey.shade200;
+  Color get getHighlightShimmerColor =>
+      getDarkTheme ? Colors.grey.shade700 : Colors.grey.shade400;
+  Color get getWidgetShimmerColor =>
+      getDarkTheme ? Colors.grey.shade600 : Colors.grey.shade100;
 }

@@ -12,4 +12,9 @@ enum SortByEnum {
 }
 
 const defaultButtonPadding = EdgeInsets.fromLTRB(16, 8, 16, 8);
-const defaultSmallButtonPadding = EdgeInsets.all(8,);
+const defaultSmallButtonPadding = EdgeInsets.all(8);
+
+TextStyle smallTextStyle = const TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+);
