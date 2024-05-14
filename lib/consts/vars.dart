@@ -18,3 +18,15 @@ TextStyle smallTextStyle = const TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.w600,
 );
+
+const List<String> searchKeywords = [
+  'Football',
+  'Flutter',
+  'Python',
+  'Weather',
+  'Crypto',
+  'Bitcoin',
+  'Youtube',
+  'Netflix',
+  'Meta',
+];

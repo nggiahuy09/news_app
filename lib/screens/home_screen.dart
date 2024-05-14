@@ -2,13 +2,15 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/consts/global_colors.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/screens/search_screen.dart';
 import 'package:news_app/services/utils.dart';
 import 'package:news_app/widgets/my_articles_widget.dart';
 import 'package:news_app/widgets/my_drawer.dart';
-import 'package:news_app/widgets/my_loading_widget.dart';
 import 'package:news_app/widgets/my_pagination_button.dart';
 import 'package:news_app/widgets/my_tabs.dart';
 import 'package:news_app/widgets/my_top_trending_widget.dart';
+import 'package:page_transition/page_transition.dart';
+// import 'package:news_app/widgets/my_loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                PageTransition(
+                  type: PageTransitionType.rightToLeft,
+                  child: const SearchScreen(),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.search,
             ),
@@ -198,28 +207,28 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 8),
 
             // loading widget
-            MyLoadingWidget(newsType: newsType),
+            // MyLoadingWidget(newsType: newsType),
 
             // list articles
-          //   newsType == NewsType.allNews
-          //       ? Expanded(
-          //           child: ListView.builder(
-          //             itemCount: 20,
-          //             itemBuilder: (context, index) {
-          //               return const MyArticlesWidget();
-          //             },
-          //           ),
-          //         )
-          //       : SizedBox(
-          //           height: Utils(context).getScreenSize.height * 0.62,
-          //           child: Swiper(
-          //             itemCount: 10,
-          //             layout: SwiperLayout.STACK,
-          //             itemWidth: Utils(context).getScreenSize.width * 0.9,
-          //             itemBuilder: (context, index) =>
-          //                 const TopTrendingWidget(),
-          //           ),
-          //         ),
+            newsType == NewsType.allNews
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: 20,
+                      itemBuilder: (context, index) {
+                        return const MyArticlesWidget();
+                      },
+                    ),
+                  )
+                : SizedBox(
+                    height: Utils(context).getScreenSize.height * 0.62,
+                    child: Swiper(
+                      itemCount: 10,
+                      layout: SwiperLayout.STACK,
+                      itemWidth: Utils(context).getScreenSize.width * 0.9,
+                      itemBuilder: (context, index) =>
+                          const TopTrendingWidget(),
+                    ),
+                  ),
           ],
         ),
       ),
