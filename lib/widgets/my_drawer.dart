@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:news_app/providers/theme_provider.dart';
+import 'package:news_app/screens/bookmark_screen.dart';
 import 'package:news_app/widgets/my_list_tile.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class MyDrawerWidget extends StatefulWidget {
@@ -53,7 +55,15 @@ class _MyDrawerWidgetState extends State<MyDrawerWidget> {
                         MyListTileWidget(
                           title: 'Bookmarks',
                           icon: IconlyBold.bookmark,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).push(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const BookmarkScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),

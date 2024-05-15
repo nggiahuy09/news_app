@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/screens/empty_screen.dart';
 import 'package:news_app/services/utils.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -94,7 +94,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-              Flexible(
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: MasonryGridView.count(
@@ -123,6 +123,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     },
                   ),
                 ),
+              ),
+              const EmptyNewsScreen(
+                imagePath: 'assets/images/search.png',
+                text: 'Ops! No Results Found...',
               ),
             ],
           ),
