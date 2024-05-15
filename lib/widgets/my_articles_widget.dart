@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
+import 'package:flutter/widgets.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/screens/news_details_webview.dart';
 import 'package:news_app/services/utils.dart';
+import 'package:page_transition/page_transition.dart';
 
 class MyArticlesWidget extends StatelessWidget {
   const MyArticlesWidget({super.key});
@@ -68,24 +71,31 @@ class MyArticlesWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Icon(
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                                PageTransition(
+                                  child: const NewsDetailsWebviewScreen(),
+                                  type: PageTransitionType.rightToLeft,
+                                ),
+                              );
+                        },
+                        child: const Row(
+                          children: [
+                            Icon(
                               Icons.link,
                               color: Colors.blue,
                               size: 18,
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Link',
-                            style: TextStyle(
-                              color: Colors.blue,
+                            SizedBox(width: 8),
+                            Text(
+                              'Link',
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const Text('13/05/2025 17:10PM'),
                     ],
