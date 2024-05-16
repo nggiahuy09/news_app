@@ -1,5 +1,6 @@
 // Packages
 import 'package:flutter/material.dart';
+import 'package:news_app/screens/blog_details.dart';
 import 'package:provider/provider.dart';
 // Screens
 import 'screens/home_screen.dart';
@@ -52,7 +53,9 @@ class _MyAppState extends State<MyApp> {
           title: 'Blog',
           theme: Styles.themeData(themeChangeProvider.getDarkTheme, context),
           home: const HomeScreen(),
-          routes: const {},
+          routes: {
+            NewsDetailsScreen.routeName: (context) => const NewsDetailsScreen(),
+          },
         );
       }),
     );

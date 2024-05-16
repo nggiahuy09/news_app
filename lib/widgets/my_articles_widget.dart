@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
-import 'package:flutter/widgets.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/screens/blog_details.dart';
 import 'package:news_app/screens/news_details_webview.dart';
 import 'package:news_app/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
@@ -14,7 +14,9 @@ class MyArticlesWidget extends StatelessWidget {
     Size size = Utils(context).getScreenSize;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed(NewsDetailsScreen.routeName);
+      },
       child: Container(
         margin: const EdgeInsets.only(
           bottom: 8,
@@ -40,6 +42,7 @@ class MyArticlesWidget extends StatelessWidget {
                 width: size.width * 0.28,
                 height: size.height * 0.14,
                 boxFit: BoxFit.fill,
+                errorWidget: Image.asset('assets/images/empty_image.png'),
                 imageUrl:
                     "https://images.unsplash.com/photo-1715427345776-b3c07159c12f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
               ),
@@ -74,11 +77,11 @@ class MyArticlesWidget extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(
-                                PageTransition(
-                                  child: const NewsDetailsWebviewScreen(),
-                                  type: PageTransitionType.rightToLeft,
-                                ),
-                              );
+                            PageTransition(
+                              child: const NewsDetailsWebviewScreen(),
+                              type: PageTransitionType.rightToLeft,
+                            ),
+                          );
                         },
                         child: const Row(
                           children: [

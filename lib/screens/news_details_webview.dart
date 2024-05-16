@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/services/global_methods.dart';
 import 'package:news_app/services/utils.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -97,6 +98,8 @@ class _NewsDetailsWebviewScreenState extends State<NewsDetailsWebviewScreen> {
                       subject: 'Look what I made',
                     );
                   } catch (err) {
+                    GlobalMethods.showErrorDialog(
+                        errorMessage: err.toString(), context: context);
                     debugPrint(err.toString());
                   } finally {
                     Navigator.of(context).pop();
@@ -122,7 +125,8 @@ class _NewsDetailsWebviewScreenState extends State<NewsDetailsWebviewScreen> {
                           "https://vnexpress.net/nha-may-khon-kho-vi-hang-xuat-khau-bi-tuon-ra-ngoai-4745647.html"),
                     );
                   } catch (err) {
-                    debugPrint(err.toString());
+                    GlobalMethods.showErrorDialog(
+                        errorMessage: err.toString(), context: context);
                   } finally {
                     Navigator.of(context).pop();
                   }
@@ -144,7 +148,8 @@ class _NewsDetailsWebviewScreenState extends State<NewsDetailsWebviewScreen> {
                   try {
                     await webViewController.reload();
                   } catch (err) {
-                    debugPrint(err.toString());
+                    GlobalMethods.showErrorDialog(
+                        errorMessage: err.toString(), context: context);
                   } finally {
                     Navigator.of(context).pop();
                   }
