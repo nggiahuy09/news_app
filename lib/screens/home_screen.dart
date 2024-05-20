@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/models/news_model.dart';
+import 'package:news_app/screens/empty_screen.dart';
+import 'package:news_app/widgets/my_loading_widget.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:news_app/consts/global_colors.dart';
 import 'package:news_app/consts/vars.dart';
 import 'package:news_app/screens/search_screen.dart';
@@ -9,7 +15,7 @@ import 'package:news_app/widgets/my_drawer.dart';
 import 'package:news_app/widgets/my_pagination_button.dart';
 import 'package:news_app/widgets/my_tabs.dart';
 import 'package:news_app/widgets/my_top_trending_widget.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:news_app/services/news_api.dart';
 // import 'package:news_app/widgets/my_loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -206,29 +212,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Container(),
             const SizedBox(height: 8),
 
-            // loading widget
-            // MyLoadingWidget(newsType: newsType),
-
             // list articles
-            newsType == NewsType.allNews
-                ? Expanded(
-                    child: ListView.builder(
-                      itemCount: 20,
-                      itemBuilder: (context, index) {
-                        return const MyArticlesWidget();
-                      },
+            FutureBuilder<List<NewsModel>>(
+              future: NewsApiServices.getAllNews(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return MyLoadingWidget(
+                    newsType: newsType,
+                  );
+                } else if (snapshot.hasError) {
+                  return Expanded(
+                    child: EmptyNewsScreen(
+                      imagePath: 'assets/images/no_news.png',
+                      text: 'An error occurred ${snapshot.error}',
                     ),
-                  )
-                : SizedBox(
-                    height: Utils(context).getScreenSize.height * 0.62,
-                    child: Swiper(
-                      itemCount: 10,
-                      layout: SwiperLayout.STACK,
-                      itemWidth: Utils(context).getScreenSize.width * 0.9,
-                      itemBuilder: (context, index) =>
-                          const TopTrendingWidget(),
+                  );
+                } else if (snapshot.data == null) {
+                  return const Center(
+                    child: EmptyNewsScreen(
+                      imagePath: 'assets/images/no_news.png',
+                      text: 'No News...',
                     ),
-                  ),
+                  );
+                }
+                return newsType == NewsType.allNews
+                    ? Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return MyArticlesWidget(
+                              imageUrl: snapshot.data![index].urlToImage,
+                              title: snapshot.data![index].title,
+                              url: snapshot.data![index].url,
+                              readingTextTime:
+                                  snapshot.data![index].readingTextTime,
+                              dateToShow: snapshot.data![index].dateToShow,
+                            );
+                          },
+                        ),
+                      )
+                    : SizedBox(
+                        height: Utils(context).getScreenSize.height * 0.62,
+                        child: Swiper(
+                          itemCount: 10,
+                          layout: SwiperLayout.STACK,
+                          itemWidth: Utils(context).getScreenSize.width * 0.9,
+                          itemBuilder: (context, index) =>
+                              TopTrendingWidget(url: snapshot.data![index].url),
+                        ),
+                      );
+              },
+            ),
           ],
         ),
       ),

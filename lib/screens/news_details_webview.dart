@@ -6,7 +6,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsDetailsWebviewScreen extends StatefulWidget {
-  const NewsDetailsWebviewScreen({super.key});
+  const NewsDetailsWebviewScreen({
+    super.key,
+    required this.url,
+  });
+
+  final String url;
 
   @override
   State<NewsDetailsWebviewScreen> createState() =>
@@ -40,8 +45,7 @@ class _NewsDetailsWebviewScreenState extends State<NewsDetailsWebviewScreen> {
         ),
       )
       ..loadRequest(
-        Uri.parse(
-            "https://vnexpress.net/nha-may-khon-kho-vi-hang-xuat-khau-bi-tuon-ra-ngoai-4745647.html"),
+        Uri.parse(widget.url),
       );
     super.initState();
   }
@@ -94,8 +98,7 @@ class _NewsDetailsWebviewScreenState extends State<NewsDetailsWebviewScreen> {
                 onTap: () async {
                   try {
                     await Share.share(
-                      'URL',
-                      subject: 'Look what I made',
+                      widget.url,
                     );
                   } catch (err) {
                     GlobalMethods.showErrorDialog(
@@ -121,8 +124,7 @@ class _NewsDetailsWebviewScreenState extends State<NewsDetailsWebviewScreen> {
                 onTap: () async {
                   try {
                     await launchUrl(
-                      Uri.parse(
-                          "https://vnexpress.net/nha-may-khon-kho-vi-hang-xuat-khau-bi-tuon-ra-ngoai-4745647.html"),
+                      Uri.parse(widget.url),
                     );
                   } catch (err) {
                     GlobalMethods.showErrorDialog(
@@ -194,7 +196,7 @@ class _NewsDetailsWebviewScreenState extends State<NewsDetailsWebviewScreen> {
           elevation: 0,
           centerTitle: true,
           title: Text(
-            'URL',
+            widget.url,
             style: TextStyle(color: color),
           ),
           actions: [

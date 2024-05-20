@@ -7,7 +7,16 @@ import 'package:news_app/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
 
 class MyArticlesWidget extends StatelessWidget {
-  const MyArticlesWidget({super.key});
+  const MyArticlesWidget({
+    super.key,
+    required this.imageUrl,
+    required this.title,
+    required this.url,
+    required this.dateToShow,
+    required this.readingTextTime,
+  });
+
+  final String imageUrl, title, url, dateToShow, readingTextTime;
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +51,8 @@ class MyArticlesWidget extends StatelessWidget {
                 width: size.width * 0.28,
                 height: size.height * 0.14,
                 boxFit: BoxFit.fill,
+                imageUrl: imageUrl,
                 errorWidget: Image.asset('assets/images/empty_image.png'),
-                imageUrl:
-                    "https://images.unsplash.com/photo-1715427345776-b3c07159c12f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
               ),
             ),
             const SizedBox(width: 16),
@@ -53,21 +61,21 @@ class MyArticlesWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Title' * 20,
+                    title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.justify,
                     style: smallTextStyle,
                   ),
                   const SizedBox(height: 8),
-                  const Row(
+                  Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.timer,
                         size: 18,
                       ),
-                      SizedBox(width: 8),
-                      Text('Reading Time'),
+                      const SizedBox(width: 8),
+                      Text(readingTextTime),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -78,7 +86,7 @@ class MyArticlesWidget extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).push(
                             PageTransition(
-                              child: const NewsDetailsWebviewScreen(),
+                              child: NewsDetailsWebviewScreen(url: url),
                               type: PageTransitionType.rightToLeft,
                             ),
                           );
@@ -100,7 +108,7 @@ class MyArticlesWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const Text('13/05/2025 17:10PM'),
+                      Text(dateToShow),
                     ],
                   ),
                 ],

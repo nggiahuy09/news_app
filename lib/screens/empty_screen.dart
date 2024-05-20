@@ -21,7 +21,7 @@ class EmptyNewsScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             text,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.justify,
             style: TextStyle(
               color: color,
               fontSize: 24,

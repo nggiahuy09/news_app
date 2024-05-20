@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class GlobalMethods {
+  static String formattedDateText(String publishedAt) {
+    final parsedDate = DateTime.parse(publishedAt);
+    String formattedDate = DateFormat('yyyy-MM-dd hh:mm:ss').format(parsedDate);
+    return formattedDate;
+  }
 
   static Future<void> showErrorDialog({
     required String errorMessage,

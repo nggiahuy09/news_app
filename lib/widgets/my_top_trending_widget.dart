@@ -6,7 +6,12 @@ import 'package:news_app/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
 
 class TopTrendingWidget extends StatelessWidget {
-  const TopTrendingWidget({super.key});
+  const TopTrendingWidget({
+    super.key,
+    required this.url,
+  });
+
+  final String url;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,9 @@ class TopTrendingWidget extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       PageTransition(
-                        child: const NewsDetailsWebviewScreen(),
+                        child: NewsDetailsWebviewScreen(
+                          url: url,
+                        ),
                         type: PageTransitionType.rightToLeft,
                       ),
                     );
