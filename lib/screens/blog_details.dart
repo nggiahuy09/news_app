@@ -1,12 +1,18 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/providers/news_provider.dart';
+import 'package:news_app/services/global_methods.dart';
 import 'package:news_app/services/utils.dart';
 import 'package:news_app/widgets/my_text_content.dart';
+import 'package:provider/provider.dart';
+import 'package:reading_time/reading_time.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NewsDetailsScreen extends StatefulWidget {
-  const NewsDetailsScreen({super.key});
+  const NewsDetailsScreen({
+    super.key,
+  });
 
   static const routeName = "/NewsDetailsScreen";
 
@@ -18,6 +24,10 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final color = Utils(context).getColor;
+    final newsProvider = Provider.of<NewsProvider>(context);
+    final publishedAt = ModalRoute.of(context)?.settings.arguments.toString();
+
+    final newsModel = newsProvider.findByDate(publishedAt: publishedAt!);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,7 +36,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'By Author',
+          'By ${newsModel.authorName}',
           style: TextStyle(
             color: color,
           ),
@@ -40,7 +50,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Title' * 10,
+                  newsModel.title,
                   textAlign: TextAlign.justify,
                 ),
                 const SizedBox(height: 16),
@@ -48,11 +58,11 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '16/05/2024',
+                      GlobalMethods.formattedDateText(newsModel.publishedAt),
                       style: smallTextStyle,
                     ),
                     Text(
-                      'Reading Time',
+                      readingTime(newsModel.content).msg,
                       style: smallTextStyle,
                     ),
                   ],
@@ -66,9 +76,9 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       child: FancyShimmerImage(
                         width: double.infinity,
                         boxFit: BoxFit.fill,
-                        errorWidget: Image.asset('assets/images/empty_image.png'),
-                        imageUrl:
-                            "https://images.unsplash.com/photo-1715427345776-b3c07159c12f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                        errorWidget:
+                            Image.asset('assets/images/empty_image.png'),
+                        imageUrl: newsModel.urlToImage,
                       ),
                     ),
                     Positioned(
@@ -95,7 +105,16 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                           ),
                           const SizedBox(width: 4),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              try {
+                                Share.share(newsModel.url);
+                              } catch (err) {
+                                GlobalMethods.showErrorDialog(
+                                  errorMessage: err.toString(),
+                                  context: context,
+                                );
+                              }
+                            },
                             child: Card(
                               elevation: 10,
                               shape: const CircleBorder(),
@@ -125,7 +144,7 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                 const SizedBox(height: 8),
                 // Description
                 MyTextContent(
-                  label: 'Description' * 20,
+                  label: newsModel.description,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
@@ -138,10 +157,11 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                 const SizedBox(height: 8),
                 // Contents
                 MyTextContent(
-                  label: 'Contents' * 20,
+                  label: newsModel.content,
                   fontSize: 18,
                   fontWeight: FontWeight.normal,
                 ),
+                const SizedBox(height: 24),
               ],
             ),
           ),

@@ -215,7 +215,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // list articles
             FutureBuilder<List<NewsModel>>(
-              future: newsProvider.fetchAllNews(),
+              future: newsProvider.fetchAllNews(
+                pageIndex: currentPageIndex + 1,
+                sortBy: currentSortBy,
+              ),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return MyLoadingWidget(

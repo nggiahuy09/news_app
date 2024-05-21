@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:news_app/consts/vars.dart';
 import 'package:news_app/models/news_model.dart';
+import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/screens/blog_details.dart';
 import 'package:news_app/screens/news_details_webview.dart';
 import 'package:news_app/services/utils.dart';
@@ -20,7 +21,10 @@ class MyArticlesWidget extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(NewsDetailsScreen.routeName);
+        Navigator.of(context).pushNamed(
+          NewsDetailsScreen.routeName,
+          arguments: newsModelProvider.publishedAt,
+        );
       },
       child: Container(
         margin: const EdgeInsets.only(
