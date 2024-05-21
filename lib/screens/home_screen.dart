@@ -215,10 +215,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // list articles
             FutureBuilder<List<NewsModel>>(
-              future: newsProvider.fetchAllNews(
-                pageIndex: currentPageIndex + 1,
-                sortBy: currentSortBy,
-              ),
+              future: newsType == NewsType.allNews
+                  ? newsProvider.fetchAllNews(
+                      pageIndex: currentPageIndex + 1,
+                      sortBy: currentSortBy,
+                    )
+                  : newsProvider.fetchTopHeadlinesNews(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return MyLoadingWidget(
@@ -254,11 +256,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     : SizedBox(
                         height: Utils(context).getScreenSize.height * 0.62,
                         child: Swiper(
-                          itemCount: 10,
+                          itemCount: 7,
                           layout: SwiperLayout.STACK,
                           itemWidth: Utils(context).getScreenSize.width * 0.9,
                           itemBuilder: (context, index) =>
-                              TopTrendingWidget(url: snapshot.data![index].url),
+                              ChangeNotifierProvider.value(
+                            value: snapshot.data![index],
+                            child: const TopTrendingWidget(),
+                          ),
                         ),
                       );
               },

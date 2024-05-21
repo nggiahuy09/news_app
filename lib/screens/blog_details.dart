@@ -21,6 +21,7 @@ class NewsDetailsScreen extends StatefulWidget {
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
+
   @override
   Widget build(BuildContext context) {
     final color = Utils(context).getColor;
@@ -73,12 +74,15 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(bottom: 24),
-                      child: FancyShimmerImage(
-                        width: double.infinity,
-                        boxFit: BoxFit.fill,
-                        errorWidget:
-                            Image.asset('assets/images/empty_image.png'),
-                        imageUrl: newsModel.urlToImage,
+                      child: Hero(
+                        tag: newsModel.publishedAt,
+                        child: FancyShimmerImage(
+                          width: double.infinity,
+                          boxFit: BoxFit.fill,
+                          errorWidget:
+                              Image.asset('assets/images/empty_image.png'),
+                          imageUrl: newsModel.urlToImage,
+                        ),
                       ),
                     ),
                     Positioned(

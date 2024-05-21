@@ -47,12 +47,15 @@ class MyArticlesWidget extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: FancyShimmerImage(
-                width: size.width * 0.28,
-                height: size.height * 0.14,
-                boxFit: BoxFit.fill,
-                imageUrl: newsModelProvider.urlToImage,
-                errorWidget: Image.asset('assets/images/empty_image.png'),
+              child: Hero(
+                tag: newsModelProvider.publishedAt,
+                child: FancyShimmerImage(
+                  width: size.width * 0.28,
+                  height: size.height * 0.14,
+                  boxFit: BoxFit.fill,
+                  imageUrl: newsModelProvider.urlToImage,
+                  errorWidget: Image.asset('assets/images/empty_image.png'),
+                ),
               ),
             ),
             const SizedBox(width: 16),

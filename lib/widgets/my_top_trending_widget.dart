@@ -1,25 +1,31 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:news_app/models/news_model.dart';
+import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/screens/blog_details.dart';
 import 'package:news_app/screens/news_details_webview.dart';
+import 'package:news_app/services/global_methods.dart';
 import 'package:news_app/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class TopTrendingWidget extends StatelessWidget {
   const TopTrendingWidget({
     super.key,
-    required this.url,
   });
-
-  final String url;
 
   @override
   Widget build(BuildContext context) {
     final size = Utils(context).getScreenSize;
+    final newsModelProvider = Provider.of<NewsModel>(context);
 
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(NewsDetailsScreen.routeName);
+        Navigator.of(context).pushNamed(
+          NewsDetailsScreen.routeName,
+          arguments: newsModelProvider.publishedAt,
+        );
       },
       child: Container(
         width: double.infinity,
@@ -39,16 +45,15 @@ class TopTrendingWidget extends StatelessWidget {
                 height: size.height * 0.48,
                 boxFit: BoxFit.fill,
                 errorWidget: Image.asset('assets/images/empty_image.png'),
-                imageUrl:
-                    "https://images.unsplash.com/photo-1715427345776-b3c07159c12f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                imageUrl: newsModelProvider.urlToImage,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Title',
-              maxLines: 2,
+            Text(
+              newsModelProvider.title,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -62,7 +67,7 @@ class TopTrendingWidget extends StatelessWidget {
                     Navigator.of(context).push(
                       PageTransition(
                         child: NewsDetailsWebviewScreen(
-                          url: url,
+                          url: newsModelProvider.url,
                         ),
                         type: PageTransitionType.rightToLeft,
                       ),
@@ -86,9 +91,9 @@ class TopTrendingWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SelectableText(
-                  '14/05/2024',
-                  style: TextStyle(fontSize: 18),
+                SelectableText(
+                  newsModelProvider.dateToShow,
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
