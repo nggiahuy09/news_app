@@ -1,5 +1,6 @@
 // Packages
 import 'package:flutter/material.dart';
+import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/screens/blog_details.dart';
 import 'package:provider/provider.dart';
 // Screens
@@ -44,6 +45,9 @@ class _MyAppState extends State<MyApp> {
           // Notify about theme changes
           return themeChangeProvider;
         }),
+        ChangeNotifierProvider(
+          create: (_) => NewsProvider(),
+        ),
       ],
       child:
           //Notify about theme changes

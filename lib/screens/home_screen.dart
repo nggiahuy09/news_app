@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/models/news_model.dart';
+import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/screens/empty_screen.dart';
 import 'package:news_app/widgets/my_loading_widget.dart';
 import 'package:page_transition/page_transition.dart';
@@ -15,7 +14,7 @@ import 'package:news_app/widgets/my_drawer.dart';
 import 'package:news_app/widgets/my_pagination_button.dart';
 import 'package:news_app/widgets/my_tabs.dart';
 import 'package:news_app/widgets/my_top_trending_widget.dart';
-import 'package:news_app/services/news_api.dart';
+import 'package:provider/provider.dart';
 // import 'package:news_app/widgets/my_loading_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,6 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final newsProvider = Provider.of<NewsProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -214,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // list articles
             FutureBuilder<List<NewsModel>>(
-              future: NewsApiServices.getAllNews(),
+              future: newsProvider.fetchAllNews(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return MyLoadingWidget(
@@ -240,13 +241,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
-                            return MyArticlesWidget(
-                              imageUrl: snapshot.data![index].urlToImage,
-                              title: snapshot.data![index].title,
-                              url: snapshot.data![index].url,
-                              readingTextTime:
-                                  snapshot.data![index].readingTextTime,
-                              dateToShow: snapshot.data![index].dateToShow,
+                            return ChangeNotifierProvider.value(
+                              value: snapshot.data![index],
+                              child: const MyArticlesWidget(),
                             );
                           },
                         ),

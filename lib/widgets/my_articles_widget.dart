@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/models/news_model.dart';
 import 'package:news_app/screens/blog_details.dart';
 import 'package:news_app/screens/news_details_webview.dart';
 import 'package:news_app/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class MyArticlesWidget extends StatelessWidget {
   const MyArticlesWidget({
     super.key,
-    required this.imageUrl,
-    required this.title,
-    required this.url,
-    required this.dateToShow,
-    required this.readingTextTime,
   });
-
-  final String imageUrl, title, url, dateToShow, readingTextTime;
 
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
+    final newsModelProvider = Provider.of<NewsModel>(context);
 
     return GestureDetector(
       onTap: () {
@@ -51,7 +47,7 @@ class MyArticlesWidget extends StatelessWidget {
                 width: size.width * 0.28,
                 height: size.height * 0.14,
                 boxFit: BoxFit.fill,
-                imageUrl: imageUrl,
+                imageUrl: newsModelProvider.urlToImage,
                 errorWidget: Image.asset('assets/images/empty_image.png'),
               ),
             ),
@@ -61,7 +57,7 @@ class MyArticlesWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    newsModelProvider.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.justify,
@@ -75,7 +71,7 @@ class MyArticlesWidget extends StatelessWidget {
                         size: 18,
                       ),
                       const SizedBox(width: 8),
-                      Text(readingTextTime),
+                      Text(newsModelProvider.readingTextTime),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -86,7 +82,9 @@ class MyArticlesWidget extends StatelessWidget {
                         onTap: () {
                           Navigator.of(context).push(
                             PageTransition(
-                              child: NewsDetailsWebviewScreen(url: url),
+                              child: NewsDetailsWebviewScreen(
+                                url: newsModelProvider.url,
+                              ),
                               type: PageTransitionType.rightToLeft,
                             ),
                           );
@@ -108,7 +106,7 @@ class MyArticlesWidget extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Text(dateToShow),
+                      Text(newsModelProvider.dateToShow),
                     ],
                   ),
                 ],
