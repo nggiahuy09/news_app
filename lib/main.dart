@@ -1,5 +1,6 @@
 // Packages
 import 'package:flutter/material.dart';
+import 'package:news_app/providers/bookmarks_provider.dart';
 import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/screens/blog_details.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
           create: (_) => NewsProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => BookmarksProvider(),
+        )
       ],
       child:
           //Notify about theme changes

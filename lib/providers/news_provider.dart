@@ -28,7 +28,7 @@ class NewsProvider extends ChangeNotifier {
     return newsList;
   }
 
-  NewsModel findByDate({required String publishedAt}) {
+  NewsModel findByDate({required String? publishedAt}) {
     return newsList.firstWhere((news) => news.publishedAt == publishedAt);
   }
 }

@@ -26,7 +26,6 @@ class _MyLoadingWidget extends State<MyLoadingWidget> {
     baseShimmerColor = utils.getBaseShimmerColor;
     highlightShimmerColor = utils.getHighlightShimmerColor;
     widgetShimmerColor = utils.getWidgetShimmerColor;
-
     super.didChangeDependencies();
   }
 

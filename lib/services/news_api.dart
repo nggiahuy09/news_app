@@ -1,8 +1,8 @@
-// import 'dart:developer';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:news_app/consts/api_consts.dart';
 import 'package:news_app/consts/https_exception.dart';
+import 'package:news_app/models/bookmark_model.dart';
 import 'package:news_app/models/news_model.dart';
 
 class NewsApiServices {
@@ -152,6 +152,36 @@ class NewsApiServices {
       return NewsModel.newsFromSnapShot(newsTempList);
     } on HttpsException catch (err) {
       throw (err.codeMessage);
+    }
+  }
+
+  static Future<List<BookmarksModel>> getBookmarks() async {
+    try {
+      Uri uri = Uri.https(
+        FIREBASE_URL,
+        'bookmarks.json',
+      );
+
+      var response = await http.get(uri);
+
+      Map data = jsonDecode(response.body);
+      List allKeys = [];
+
+      if (data['code'] != null) {
+        throw HttpsException(data['code']);
+      }
+
+      for (String key in data.keys) {
+        allKeys.add(key);
+      }
+
+      if (allKeys.isEmpty) {
+        return [];
+      }
+
+      return BookmarksModel.bookmarksFromSnapshot(allKeys: allKeys, json: data);
+    } catch (err) {
+      rethrow;
     }
   }
 }

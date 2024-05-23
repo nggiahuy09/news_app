@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/consts/vars.dart';
+import 'package:news_app/models/bookmark_model.dart';
+import 'package:news_app/providers/bookmarks_provider.dart';
 import 'package:news_app/screens/empty_screen.dart';
+import 'package:news_app/widgets/my_articles_widget.dart';
+import 'package:news_app/widgets/my_drawer.dart';
+import 'package:news_app/widgets/my_loading_widget.dart';
+import 'package:provider/provider.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({super.key});
@@ -25,15 +32,50 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           ),
         ),
       ),
-      // body: ListView.builder(
-      //   itemCount: 20,
-      //   itemBuilder: (context, index) {
-      //     return const MyArticlesWidget();
-      //   },
-      // ),
-      body: const EmptyNewsScreen(
-        imagePath: 'assets/images/bookmark.png',
-        text: 'You didn\'t add anything yet to your bookmarks',
+      drawer: const MyDrawerWidget(),
+      body: Column(
+        children: [
+          FutureBuilder<List<BookmarksModel>>(
+            future: Provider.of<BookmarksProvider>(context, listen: false)
+                .fetchBookmarks(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const MyLoadingWidget(
+                  newsType: NewsType.allNews,
+                );
+              } else if (snapshot.hasError) {
+                
+                return Expanded(
+                  child: EmptyNewsScreen(
+                    imagePath: 'assets/images/no_news.png',
+                    text: 'An error occurred ${snapshot.error}',
+                  ),
+                );
+              } else if (snapshot.data == null) {
+                return const Center(
+                  child: EmptyNewsScreen(
+                    imagePath: 'assets/images/no_news.png',
+                    text: 'You didn\'t add anything yet to your bookmarks...',
+                  ),
+                );
+              }
+
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return ChangeNotifierProvider.value(
+                      value: snapshot.data![index],
+                      child: const MyArticlesWidget(
+                        isBookmark: true,
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/models/bookmark_model.dart';
 import 'package:news_app/models/news_model.dart';
 import 'package:news_app/screens/blog_details.dart';
 import 'package:news_app/screens/news_details_webview.dart';
@@ -11,12 +12,17 @@ import 'package:provider/provider.dart';
 class MyArticlesWidget extends StatelessWidget {
   const MyArticlesWidget({
     super.key,
+    this.isBookmark = false,
   });
+
+  final bool isBookmark;
 
   @override
   Widget build(BuildContext context) {
     Size size = Utils(context).getScreenSize;
-    final newsModelProvider = Provider.of<NewsModel>(context);
+    dynamic newsModelProvider = isBookmark
+        ? Provider.of<BookmarksModel>(context)
+        : Provider.of<NewsModel>(context);
 
     return GestureDetector(
       onTap: () {

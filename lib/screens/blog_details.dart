@@ -1,6 +1,8 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/models/bookmark_model.dart';
+import 'package:news_app/providers/bookmarks_provider.dart';
 import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/services/global_methods.dart';
 import 'package:news_app/services/utils.dart';
@@ -21,12 +23,47 @@ class NewsDetailsScreen extends StatefulWidget {
 }
 
 class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
+  bool isInBookmark = false;
+  String? publishedAt;
+  dynamic currentBookmark;
+
+  @override
+  void didChangeDependencies() {
+    publishedAt = ModalRoute.of(context)?.settings.arguments as String;
+    final List<BookmarksModel> bookmarksList =
+        Provider.of<BookmarksProvider>(context).getBookmarksList;
+
+    if (bookmarksList.isEmpty) {
+      return;
+    }
+
+    currentBookmark = bookmarksList
+        .where((bookmark) => bookmark.publishedAt == publishedAt)
+        .toList();
+
+    if (currentBookmark.isEmpty) {
+      isInBookmark = false;
+    } else {
+      isInBookmark = true;
+    }
+
+    super.didChangeDependencies();
+  }
+
+  String getBookmarkKey(String publishedAt) {
+    final bookmarksProvider = Provider.of<BookmarksProvider>(context);
+    BookmarksModel bookmarksModel = bookmarksProvider.getBookmarksList
+        .firstWhere((element) => element.publishedAt == publishedAt);
+
+    String res = bookmarksModel.bookmarkKey;
+    return res;
+  }
 
   @override
   Widget build(BuildContext context) {
     final color = Utils(context).getColor;
     final newsProvider = Provider.of<NewsProvider>(context);
-    final publishedAt = ModalRoute.of(context)?.settings.arguments.toString();
+    final bookmarksProvider = Provider.of<BookmarksProvider>(context);
 
     final newsModel = newsProvider.findByDate(publishedAt: publishedAt!);
 
@@ -91,24 +128,6 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                       child: Row(
                         children: [
                           GestureDetector(
-                            onTap: () {},
-                            child: Card(
-                              elevation: 10,
-                              shape: const CircleBorder(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.bookmark_outline_rounded,
-                                  size: 24,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          GestureDetector(
                             onTap: () {
                               try {
                                 Share.share(newsModel.url);
@@ -130,6 +149,39 @@ class _NewsDetailsScreenState extends State<NewsDetailsScreen> {
                                   color: Theme.of(context)
                                       .colorScheme
                                       .onBackground,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          GestureDetector(
+                            onTap: () async {
+                              if (isInBookmark) {
+                                await bookmarksProvider.deleteFromBookmark(
+                                  context: context,
+                                  bookmarkKey: currentBookmark[0].bookmarkKey,
+                                );
+                              } else {
+                                await bookmarksProvider.addToBookmark(
+                                  context: context,
+                                  newsModel: newsModel,
+                                );
+                              }
+                              await bookmarksProvider.fetchBookmarks();
+                            },
+                            child: Card(
+                              elevation: 10,
+                              shape: const CircleBorder(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.bookmark,
+                                  size: 24,
+                                  color: isInBookmark
+                                      ? Colors.yellow.shade700
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
                                 ),
                               ),
                             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:news_app/providers/theme_provider.dart';
 import 'package:news_app/screens/bookmark_screen.dart';
+import 'package:news_app/screens/home_screen.dart';
 import 'package:news_app/widgets/my_list_tile.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -50,14 +51,22 @@ class _MyDrawerWidgetState extends State<MyDrawerWidget> {
                         MyListTileWidget(
                           title: 'Home',
                           icon: IconlyBold.home,
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pushReplacement(
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: const HomeScreen(),
+                              ),
+                            );
+                          },
                         ),
                         MyListTileWidget(
                           title: 'Bookmarks',
                           icon: IconlyBold.bookmark,
                           onTap: () {
                             Navigator.of(context).pop();
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               PageTransition(
                                 type: PageTransitionType.rightToLeft,
                                 child: const BookmarkScreen(),
