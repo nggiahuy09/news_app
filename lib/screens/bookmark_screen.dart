@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/screens/empty_screen.dart';
-import 'package:news_app/services/utils.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({super.key});

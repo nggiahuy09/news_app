@@ -1,11 +1,8 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:news_app/models/news_model.dart';
-import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/screens/blog_details.dart';
 import 'package:news_app/screens/news_details_webview.dart';
-import 'package:news_app/services/global_methods.dart';
 import 'package:news_app/services/utils.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';

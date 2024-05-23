@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:news_app/consts/vars.dart';
+import 'package:news_app/models/news_model.dart';
+import 'package:news_app/providers/news_provider.dart';
 import 'package:news_app/screens/empty_screen.dart';
 import 'package:news_app/services/utils.dart';
+import 'package:news_app/widgets/my_articles_widget.dart';
+import 'package:provider/provider.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -14,6 +18,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late TextEditingController searchController = TextEditingController();
   late FocusNode focusNode = FocusNode();
+  List<NewsModel>? searchList = [];
+  bool isSearching = false;
 
   @override
   void dispose() {
@@ -28,6 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     Color color = Utils(context).getColor;
+    final newsProvider = Provider.of<NewsProvider>(context);
 
     return GestureDetector(
       onTap: () {
@@ -71,6 +78,15 @@ class _SearchScreenState extends State<SearchScreen> {
                         keyboardType: TextInputType.text,
                         textCapitalization: TextCapitalization.sentences,
                         textInputAction: TextInputAction.search,
+                        onEditingComplete: () async {
+                          searchList = await newsProvider.fetchNewsSearched(
+                            query: searchController.text,
+                          );
+
+                          isSearching = true;
+                          focusNode.unfocus();
+                          setState(() {});
+                        },
                         decoration: InputDecoration(
                           hintText: 'Search',
                           focusedBorder: InputBorder.none,
@@ -78,9 +94,10 @@ class _SearchScreenState extends State<SearchScreen> {
                           suffixIcon: IconButton(
                             onPressed: () {
                               searchController.clear();
+                              isSearching = false;
+                              searchList!.clear();
                               focusNode.unfocus();
                               setState(() {});
-                              debugPrint('Cleared');
                             },
                             icon: Icon(
                               Icons.close,
@@ -94,40 +111,63 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: MasonryGridView.count(
-                    itemCount: searchKeywords.length,
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 12,
-                    crossAxisSpacing: 8,
+              if (searchList!.isEmpty && isSearching)
+                const EmptyNewsScreen(
+                  imagePath: 'assets/images/search.png',
+                  text: 'Ops! No Results Found...',
+                ),
+              if (!isSearching && searchList!.isEmpty)
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: MasonryGridView.count(
+                      itemCount: searchKeywords.length,
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 8,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            searchList = await newsProvider.fetchNewsSearched(
+                              query: searchKeywords[index],
+                            );
+                            isSearching = true;
+                            focusNode.unfocus();
+                            setState(() {
+                              searchController.text = searchKeywords[index];
+                            });
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: color,
+                              ),
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: Center(
+                              child: Text(
+                                searchKeywords[index],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              if (searchList != null && searchList!.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: searchList!.length,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: color,
-                            ),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Center(
-                            child: Text(
-                              searchKeywords[index],
-                            ),
-                          ),
-                        ),
+                      return ChangeNotifierProvider.value(
+                        value: searchList![index],
+                        child: const MyArticlesWidget(),
                       );
                     },
                   ),
                 ),
-              ),
-              const EmptyNewsScreen(
-                imagePath: 'assets/images/search.png',
-                text: 'Ops! No Results Found...',
-              ),
             ],
           ),
         ),

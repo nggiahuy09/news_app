@@ -14,7 +14,7 @@ class EmptyNewsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color = Utils(context).getColor;
 
-    return Center(
+    return SingleChildScrollView(
       child: Column(
         children: [
           Image.asset(imagePath),
